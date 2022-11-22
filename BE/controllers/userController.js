@@ -59,9 +59,10 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user.id;
 
   const user = await userService.getUserById(userId);
+
   return res.status(200).json({
     message : 'SUCCESS',
     data : user

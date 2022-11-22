@@ -3,12 +3,13 @@ const storeService = require('../services/storeService')
 // 스토어 등록
 const addStore = async (req, res) => {
   try {
+    const userId = req.user.id;
     const { 
       storeName,
       storeAddress,
     } = req.body;
 
-    const storeInfo = await storeService.addStore(storeName, storeAddress);
+    const storeInfo = await storeService.addStore(userId, storeName, storeAddress);
 
     return res.status(201).json({
       message : 'STORE_CREATED',

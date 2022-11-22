@@ -1,7 +1,7 @@
 const storeDao = require('../models/storeDao');
 
-const addStore = async (storeName, storeAddress) => {
-  const storeInfo = await storeDao.addStore(storeName, storeAddress)
+const addStore = async (userId, storeName, storeAddress) => {
+  const storeInfo = await storeDao.addStore(userId, storeName, storeAddress)
 
   return storeInfo;
 }
