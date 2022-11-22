@@ -1,17 +1,18 @@
 require('dotenv').config();
 
-const express = require('express')
+const express = require('express');
 const cors = require('cors');
 const morgan =require('morgan');
 
-const app = express()
+const app = express();
 const routes = require('./routes');
 const { globalErrorHandler } = require('./utils/error');
 const { sequelize, client } = require('./models');
+const { logger } = require('./utils/winston');
 const port = process.env.SERVER_PORT
 
 app.use(cors());
-app.use(morgan('combined'));
+app.use(morgan('short', {stream : logger.stream}));
 app.use(express.json());
 app.use(routes);
 // 에러 핸들링을 위해 routes 실행 코드 밑에 작성
@@ -43,7 +44,7 @@ const start = async () => {
 
   // 서버 시작
   try {
-    app.listen(port, () => console.log(`Server is listening on ${port}`));
+    app.listen(port, () => logger.info(`Server is listening on ${port}`));
   } catch (err) {
     console.error(err);
   }
