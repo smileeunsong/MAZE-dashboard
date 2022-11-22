@@ -1,76 +1,53 @@
-const userService = require('../services/userService')
+const userService = require('../services/userService');
+const { catchAsync } = require('../utils/error');
 
 // 코드 발급, 문자 발송
-const sendCode = async (req, res) => {
-  try {
-    const { userPhoneNum } = req.body;
-    await userService.sendCode(userPhoneNum);
+const sendCode = catchAsync(async (req, res) => {
+  const { userPhoneNum } = req.body;
+  await userService.sendCode(userPhoneNum);
 
-    res.status(200).json({
-      message : 'CODE_SENT'
-    });  
-  } catch (error) {
-    res.status(error.statusCode).json({
-      message : error.message
-    })
-  }
-}
+  res.status(200).json({
+    message : 'CODE_SENT'
+  })
+});
 
 // 코드 비교
-const compareAuthCode = async (req, res) => {
-  try {
-    const { userPhoneNum, userCode } = req.body;
+const compareAuthCode = catchAsync(async (req, res) => {
+  const { userPhoneNum, userCode } = req.body;
 
-    await userService.compareAuthCode(userPhoneNum, userCode);
+  await userService.compareAuthCode(userPhoneNum, userCode);
 
-    res.status(200).json({
-      message : 'AUTHENTICATION_SUCCESS'
-    })
-  } catch (error) {
-    res.status(error.statusCode).json({
-      message : error.message
-    })
-  }
-}
+  res.status(200).json({
+    message : 'AUTHENTICATION_SUCCESS'
+  })
+});
 
 // 회원가입 : 회원 정보 DB 저장 후 생성된 회원 id로 회원 정보 반환
-const signUp = async (req, res) => {
-  try {
-    const {
-      userName,
-      userPhoneNum,
-      email,
-      password,
-    } = req.body;
+const signUp = catchAsync(async (req, res) => {
+  const {
+    userName,
+    userPhoneNum,
+    email,
+    password,
+  } = req.body;
 
-    const userId = await userService.signUp(userName, userPhoneNum, email, password);
-    const userInfo = await userService.getUserById(userId);
-  
-    res.status(201).json({
-      message : 'USER_CREATED',
-      data : userInfo
-    })
-  } catch (error) {
-    res.status(error.statusCode).json({
-      message : error.message
-    })
-  }
-}
+  const userId = await userService.signUp(userName, userPhoneNum, email, password);
+  const userInfo = await userService.getUserById(userId);
 
-const signIn = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const accessToken = await userService.signIn(email, password);
+  res.status(201).json({
+    message : 'USER_CREATED',
+    data : userInfo
+  })
+});
 
-    res.status(200).json({ 
-      message : 'LOGIN_SUCCESS',
-      accessToken })
-  } catch (error) {
-    res.status(error.statusCode).json({
-      message : error.message
-    })
-  }
-}
+const signIn = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  const accessToken = await userService.signIn(email, password);
+
+  res.status(200).json({ 
+    message : 'LOGIN_SUCCESS',
+    accessToken })
+});
 
 const getUsers = async (req, res) => {
   const users = await userService.getUsers();

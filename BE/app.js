@@ -6,6 +6,7 @@ const morgan =require('morgan');
 
 const app = express()
 const routes = require('./routes');
+const { globalErrorHandler } = require('./utils/error');
 const { sequelize, client } = require('./models');
 const port = process.env.SERVER_PORT
 
@@ -13,6 +14,8 @@ app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(routes);
+// 에러 핸들링을 위해 routes 실행 코드 밑에 작성
+app.use(globalErrorHandler);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
