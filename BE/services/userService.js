@@ -97,6 +97,23 @@ const hashPassword = async (plaintextPassword) => {
 // 회원 정보 DB 저장 후 해당 회원 id 반환
 const signUp = async (userName, userPhoneNum, email, password) => {
 
+  // 기대 요청값들이 하나라도 들어오지 않았을 경우
+  if ( !userName || !userPhoneNum || !email || !password ) {
+    const error = new Error('KEY_ERROR');
+    error.statusCode = 400;
+
+    throw error;
+  }
+
+  // 해당 email로 가입된 회원이 존재하는 경우
+  const user = await userDao.getUserByEmail(email);
+  if (user) {
+    const error = new Error('ALREADY_REGISTED_USER');
+    error.statusCode = 400;
+
+    throw error;
+  }
+
   const hashedPassword = await hashPassword(password);
 
   const userId = await userDao.addUser(userName, userPhoneNum, email, hashedPassword);
