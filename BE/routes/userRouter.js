@@ -11,6 +11,9 @@ router.post('/auth/validation', userController.compareAuthCode);
 // 회원가입
 router.post('/signup', userController.signUp);
 
+// 이메일 중복 확인
+router.post('/signup/check-email', userController.checkEmail);
+
 // 회원 로그인
 router.post('/signin', userController.signIn);
 
