@@ -40,6 +40,16 @@ const signUp = catchAsync(async (req, res) => {
   })
 });
 
+const checkEmail = catchAsync(async (req, res) => {
+  const { email } = req.body;
+
+  await userService.checkEmail(email);
+  
+  res.status(200).json({
+    message : 'EMAIL_AVAILABLE'
+  })
+})
+
 const signIn = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const accessToken = await userService.signIn(email, password);
@@ -73,6 +83,7 @@ module.exports = {
   sendCode,
   compareAuthCode,
   signUp,
+  checkEmail,
   signIn,
   getUsers,
   getUserById,

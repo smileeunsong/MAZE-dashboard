@@ -105,6 +105,16 @@ const signUp = async (userName, userPhoneNum, email, password) => {
     throw error;
   }
 
+  const hashedPassword = await hashPassword(password);
+
+  const userId = await userDao.addUser(userName, userPhoneNum, email, hashedPassword);
+
+  return userId;
+}
+
+// 이메일 중복 체크
+const checkEmail = async (email) => {
+
   // 해당 email로 가입된 회원이 존재하는 경우
   const user = await userDao.getUserByEmail(email);
   if (user) {
@@ -113,12 +123,6 @@ const signUp = async (userName, userPhoneNum, email, password) => {
 
     throw error;
   }
-
-  const hashedPassword = await hashPassword(password);
-
-  const userId = await userDao.addUser(userName, userPhoneNum, email, hashedPassword);
-
-  return userId;
 }
 
 // 로그인
@@ -170,6 +174,7 @@ module.exports = {
   sendCode,
   compareAuthCode,
   signUp,
+  checkEmail,
   signIn,
   getUsers,
   getUserById,
