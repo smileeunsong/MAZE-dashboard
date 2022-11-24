@@ -1,0 +1,12 @@
+{
+  "data": {
+    "id": 1,
+    "username": "김우진",
+    "imageUrl": "https://user-images.githubusercontent.com/111094669/193998675-9ccf6d46-0ca8-4d2c-8108-022fa100f540.png",
+    "name": "누적매출",
+    "sales": 7280000,
+    "salesqty": 2430,
+    "salestarget": 8000000,
+    "lastmonthsales": 2700
+  }
+}
