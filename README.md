@@ -41,7 +41,7 @@
 </br>
 
 ## ERD
-![MAZE_PROJECT](https://user-images.githubusercontent.com/111448985/203710249-fdda9653-f20b-4e63-8a4d-f78f3c373d57.png)
+![MAZE_PROJECT (1)](https://user-images.githubusercontent.com/111448985/203718169-6249f475-3eac-40aa-a638-64039a3d1739.png)
 
 </br>
 </br>
