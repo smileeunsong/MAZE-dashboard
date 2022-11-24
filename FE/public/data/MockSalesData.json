@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "month": "January",
+      "sales": "870"
+    },
+    {
+      "id": 2,
+      "month": "February",
+      "sales": "1000"
+    }
+  ]
+}
