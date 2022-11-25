@@ -55,6 +55,7 @@
 ## STACK  
 
 ### Front  
+![](https://img.shields.io/badge/FRONT-JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript)   
 ![](https://img.shields.io/badge/FRONT-React-61DAFB?style=for-the-badge&logo=React)   
 ![](https://img.shields.io/badge/FRONT-TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS)      
 ![](https://img.shields.io/badge/FRONT-Netlify-00C7B7?style=for-the-badge&logo=Netlify)   
