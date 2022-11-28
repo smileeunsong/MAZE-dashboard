@@ -9,7 +9,7 @@ import Signup from "./Login/Signup";
 function App() {
   return (
     <MainStore>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/main" element={<Main />} />
