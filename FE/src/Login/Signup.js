@@ -6,6 +6,7 @@ const Signup = () => {
   const context = useContext(MainContext);
   const { apiUrl } = context;
   const [verify, setVerify] = useState(false);
+  const [emailVerify, setEmailVerify] = useState(false);
   const [inputValue, setInputValue] = useState({
     userName: "",
     userId: "",
@@ -35,14 +36,18 @@ const Signup = () => {
 
   const isValidVerification = verification.length === 6;
 
-  const activateSubmit =
-    isValidEmail && isValidPassword && isValidInput && verify === true;
-
   const activateGetVerification = isValidPhoneNumber === true;
 
   const activateCheckVerification = isValidVerification === true;
 
   const activateDuplicateIdCheck = isValidEmail === true;
+
+  const activateSubmit =
+    isValidEmail &&
+    isValidPassword &&
+    isValidInput &&
+    verify === true &&
+    emailVerify === true;
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -66,6 +71,7 @@ const Signup = () => {
       .then((data) => {
         if (data.message === "EMAIL_AVAILABLE") {
           alert("사용 가능한 이메일입니다.");
+          setEmailVerify(true);
         } else if (data.message === "ALREADY_REGISTED_USER") {
           alert("이미 등록된 이메일입니다.");
         }
@@ -194,7 +200,7 @@ const Signup = () => {
               type="password"
               name="userPw"
               maxLength={20}
-              placeholder="비밀번호 : ***********"
+              placeholder="비밀번호 : (8자리 이상, 특수문자 포함)"
               onChange={handleInput}
             />
           </p>
@@ -255,7 +261,7 @@ const Signup = () => {
         </div>
         <div className="flex justify-center">
           <button
-            className="h-10 text-lg border-emerald-300 mx-10 my-3 bg-emerald-400 border-2 w-40 rounded disabled:opacity-60 mb-5"
+            className="h-10 text-lg border-emerald-300 mx-10 my-3 bg-emerald-400 border-2 w-40 rounded disabled:opacity-40 mb-5"
             type="submit"
             value="submit"
             disabled={activateSubmit ? false : true}
