@@ -11,7 +11,7 @@ function MainStore(props) {
   const [dashData, setDashData] = useState([]);
   const navigate = useNavigate;
 
-  const apiUrl = "http://192.168.1.230:3000";
+  const apiUrl = "http://maze-wecode-be.tk";
 
   const goBack = () => {
     navigate(-1);

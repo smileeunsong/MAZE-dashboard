@@ -6,8 +6,8 @@ function UserCalendar() {
   const [date, setDate] = useState(new Date());
 
   return (
-    <div className="flex justify-center my-5">
-      <div className="app">
+    <div className="flex justify-center ">
+      <div className="app my-5">
         <h1 className="header text-xl font-bold flex justify-center">
           Calendar
         </h1>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiKakaotalk } from "react-icons/si";
 import { MainContext } from "../Main/MainContext";
@@ -52,6 +52,10 @@ const Login = () => {
       });
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("TOKEN") !== null) return navigate("/main");
+  });
+
   return (
     <div className="flex justify-center items-center w-full h-screen bg-gray-100 flex-col">
       <div className="border-2 rounded-xl border-gray-200 bg-white">
@@ -101,7 +105,7 @@ const Login = () => {
           <div className="flex justify-center">
             <Link
               className="flex flex-row justify-center items-center w-72 h-10 mx-10 pl-2 mb-5"
-              to="/blank"
+              to="/kakaologin"
             >
               <SiKakaotalk className="text-yellow-300 mr-5" />{" "}
               <span>Kakao로 로그인</span>

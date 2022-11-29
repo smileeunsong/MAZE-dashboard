@@ -50,7 +50,7 @@ const NavBar = () => {
       </div>
       <div className="w-full h-auto" onClick={handleModalClose}>
         {openModal && (
-          <div className="absolute top-14 right-0 w-48 bg-white z-10 rounded-lg border-2">
+          <div className="fixed top-14 right-0 w-48 bg-white z-10 rounded-lg border-2">
             <Link to="/blank">
               <div className="p-2 ml-2 border-b">Profile </div>
             </Link>
