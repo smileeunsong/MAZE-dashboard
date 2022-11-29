@@ -5,6 +5,7 @@ import MainStore from "./Main/MainContext";
 import Blank from "./Main/Blank";
 import Login from "./Login/Login";
 import Signup from "./Login/Signup";
+import KakaoLogin from "./Login/KakaoLogin";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/main" element={<Main />} />
           <Route path="/blank" element={<Blank />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/kakaologin" element={<KakaoLogin />} />
         </Routes>
       </BrowserRouter>
     </MainStore>
