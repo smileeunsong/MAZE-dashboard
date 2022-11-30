@@ -159,6 +159,52 @@ const signIn = async (email, password) => {
   return accessToken;
 }
 
+const getKakaoUserInfo = async (kakaoAccessToken) => {
+
+  const result = await axios({
+    method: 'POST',
+    url: 'https://kapi.kakao.com/v2/user/me',
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Authorization': `Bearer ${kakaoAccessToken}`
+    }
+  })
+
+  const kakaoUserInfo = result.data;
+  return kakaoUserInfo
+};
+
+const storeKakaoUserInfo = async(kakaoUserInfo) => {
+  
+  const kakaoId = kakaoUserInfo.id;
+  const { email } = kakaoUserInfo.kakao_account;
+  const { nickname } = kakaoUserInfo.kakao_account.profile;
+  const profileImageUrl = kakaoUserInfo.kakao_account.profile.profile_image_url;
+    
+  const userId = await userDao.getUserIdByKakaoId(kakaoId);
+
+  if (!userId) {
+    await userDao.storeKakaoUserInfo(kakaoId, email, nickname, profileImageUrl)
+  }
+};
+
+const generateToken = async(kakaoUserInfo) => {
+  const userId = await userDao.getUserIdByKakaoId(kakaoUserInfo.id);
+
+  if (!userId) {
+    const err = new Error('SPECIFIED_USER_DOES_NOT_EXIST');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, 
+    { 
+      algorithm: process.env.ALGORITHM, 
+      expiresIn: process.env.JWT_EXPIRES_IN 
+    }
+  );
+};
+
 // 전체 회원 정보 반환
 const getUsers = async () => {
   return await userDao.getUsers();
@@ -176,6 +222,9 @@ module.exports = {
   signUp,
   checkEmail,
   signIn,
+  getKakaoUserInfo,
+  storeKakaoUserInfo,
+  generateToken,
   getUsers,
   getUserById,
 }

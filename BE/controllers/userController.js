@@ -59,6 +59,24 @@ const signIn = catchAsync(async (req, res) => {
     accessToken })
 });
 
+const kakaoSignIn = async (req, res) => {
+  const { kakaoAccessToken } = req.body;
+
+  const kakaoUserInfo = await userService.getKakaoUserInfo(kakaoAccessToken);
+  await userService.storeKakaoUserInfo(kakaoUserInfo);
+
+  const token = await userService.generateToken(kakaoUserInfo);
+
+  return res.status(200).json({ 
+    message : 'LOGIN_SUCCESS',
+    accessToken : token
+  });
+}
+
+const googleSignIn = async (req, res) => {
+
+}
+
 const getUsers = async (req, res) => {
   const users = await userService.getUsers();
 
@@ -85,6 +103,8 @@ module.exports = {
   signUp,
   checkEmail,
   signIn,
+  kakaoSignIn,
+  googleSignIn,
   getUsers,
   getUserById,
 }
