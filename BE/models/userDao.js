@@ -50,6 +50,27 @@ const storeKakaoUserInfo = async (kakaoId, email, nickname, profileImageUrl) => 
  });
 }
 
+const getUserIdByGoogleId = async (googleId) => {
+  const result = await User.findOne({
+    where: { googleId: googleId }
+  });
+
+  if (!result) {
+    return false;
+  }
+
+  return result.dataValues.id;
+}
+
+const storeGoogleUserInfo = async (googleId, email, name, profileImageUrl) => {
+  await User.create({
+    googleId : googleId,
+    email : email,
+    name : name,
+    profileImageUrl : profileImageUrl
+   });
+}
+
 const getUsers = async () => {
   const users = await User.findAll();
 
@@ -79,6 +100,8 @@ module.exports = {
   addUser,
   getUserIdByKakaoId,
   storeKakaoUserInfo,
+  getUserIdByGoogleId,
+  storeGoogleUserInfo,
   getUsers,
   getUserById,
   getUserByEmail,

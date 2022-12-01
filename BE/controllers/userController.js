@@ -74,7 +74,17 @@ const kakaoSignIn = async (req, res) => {
 }
 
 const googleSignIn = async (req, res) => {
+  const { googleAccessToken } = req.body;
 
+  const googleUserInfo = await userService.getGoogleUserInfo(googleAccessToken);
+  await userService.storeGoogleUserInfo(googleUserInfo);
+
+  const token = await userService.generateToken(googleUserInfo);
+
+  return res.status(200).json({
+    message : 'LOGIN_SUCCESS',
+    accessToken : token
+  });
 }
 
 const getUsers = async (req, res) => {

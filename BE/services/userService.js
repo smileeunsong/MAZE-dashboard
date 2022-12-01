@@ -174,7 +174,7 @@ const getKakaoUserInfo = async (kakaoAccessToken) => {
   return kakaoUserInfo
 };
 
-const storeKakaoUserInfo = async(kakaoUserInfo) => {
+const storeKakaoUserInfo = async (kakaoUserInfo) => {
   
   const kakaoId = kakaoUserInfo.id;
   const { email } = kakaoUserInfo.kakao_account;
@@ -188,8 +188,11 @@ const storeKakaoUserInfo = async(kakaoUserInfo) => {
   }
 };
 
-const generateToken = async(kakaoUserInfo) => {
-  const userId = await userDao.getUserIdByKakaoId(kakaoUserInfo.id);
+const generateToken = async (userInfo) => {
+  const userIdKakao = await userDao.getUserIdByKakaoId(userInfo.id);  
+  const userIdGoogle = await userDao.getUserIdByGoogleId(userInfo.id);
+  
+  let userId = userIdKakao ? userIdKakao : userIdGoogle;
 
   if (!userId) {
     const err = new Error('SPECIFIED_USER_DOES_NOT_EXIST');
@@ -204,6 +207,27 @@ const generateToken = async(kakaoUserInfo) => {
     }
   );
 };
+
+const getGoogleUserInfo = async (googleAccessToken) => {
+  const result = await axios({
+    method: 'GET',
+    url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleAccessToken}`
+  })
+
+  return result.data
+}
+
+const storeGoogleUserInfo = async (googleUserInfo) => {
+  const googleId = googleUserInfo.id;
+  const { email, name } = googleUserInfo;
+  const profileImageUrl = googleUserInfo.picture;
+
+  const userId = await userDao.getUserIdByGoogleId(googleId);
+
+  if (!userId) {
+    await userDao.storeGoogleUserInfo(googleId, email, name, profileImageUrl)
+  }
+}
 
 // 전체 회원 정보 반환
 const getUsers = async () => {
@@ -225,6 +249,8 @@ module.exports = {
   getKakaoUserInfo,
   storeKakaoUserInfo,
   generateToken,
+  getGoogleUserInfo,
+  storeGoogleUserInfo,
   getUsers,
   getUserById,
 }

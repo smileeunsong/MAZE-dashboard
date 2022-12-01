@@ -14,7 +14,6 @@ module.exports = class User extends Sequelize.Model {
       email: {
         type: Sequelize.STRING(30),
         allowNull: true,
-        unique: true,
       },
       password: {
         type: Sequelize.STRING(100),
@@ -27,7 +26,11 @@ module.exports = class User extends Sequelize.Model {
       kakaoId: {
         type: Sequelize.BIGINT,
         allowNull: true,
-      }
+      },
+      googleId: {
+        type: Sequelize.DECIMAL(30,0),
+        allowNull: true,
+      },
     }, {
       sequelize,
       timestamps: true,
