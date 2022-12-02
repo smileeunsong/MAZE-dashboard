@@ -1,15 +1,32 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { SiKakaotalk } from "react-icons/si";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
 import { MainContext } from "../Main/MainContext";
 
 const Login = () => {
+  const APIKEY = process.env.REACT_APP_APIKEY;
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${APIKEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("#access_token");
+  const navigate = useNavigate();
+
+  console.log(code);
+
   const context = useContext(MainContext);
   const { apiUrl } = context;
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
 
-  const navigate = useNavigate();
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href =
+      "https://accounts.google.com/o/oauth2/auth?client_id=7699237530-i6ads8bsf9ltfm1rvg1tgiu1bissbs9i.apps.googleusercontent.com&redirect_uri=http://localhost:3000/googlelogin&response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+  };
 
   const isValidEmail = userId.includes("@") && userId.includes(".");
   // 비밀번호 특수문자 검사를 위한 정규식표현.
@@ -90,7 +107,7 @@ const Login = () => {
           <div className="flex justify-center">
             <button
               className={
-                "border-2 border-emerald-300 w-72 h-10 mx-10 rounded pl-2 mb-5 bg-emerald-400 disabled:opacity-60"
+                "border-2 border-emerald-300 w-72 h-10 mx-10 rounded mb-5 bg-emerald-400 disabled:opacity-60"
               }
               type="submit"
               disabled={activateSubmit ? false : true}
@@ -99,17 +116,26 @@ const Login = () => {
               Submit
             </button>
           </div>
-          <div>
+          <div className="mb-4">
             <p>또는</p>
           </div>
           <div className="flex justify-center">
-            <Link
-              className="flex flex-row justify-center items-center w-72 h-10 mx-10 pl-2 mb-5"
-              to="/kakaologin"
+            <button
+              className="flex flex-row justify-center items-center w-72 h-10 mx-10 bg-yellow-300 rounded"
+              onClick={handleKakaoLogin}
             >
-              <SiKakaotalk className="text-yellow-300 mr-5" />{" "}
-              <span>Kakao로 로그인</span>
-            </Link>
+              <RiKakaoTalkFill className="mr-2" />{" "}
+              <span>카카오 계정 로그인</span>
+            </button>
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="flex flex-row justify-center items-center w-72 h-10 mx-10 rounded border-2 mt-2 mb-5"
+              onClick={handleGoogleLogin}
+            >
+              <FcGoogle className="mr-2" />
+              <span>구글 계정 로그인</span>
+            </button>
           </div>
         </div>
       </div>

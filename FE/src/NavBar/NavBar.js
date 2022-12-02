@@ -13,10 +13,31 @@ const NavBar = () => {
   const { openModal, handleModalOpen, handleModalClose, goBack, dashData } =
     context;
   const navigate = useNavigate();
+  const APIKEY = process.env.REACT_APP_APIKEY;
+  const LOGOUT_URI = process.env.REACT_APP_LOGOUT_URI;
+
+  const kakaoToken = localStorage.getItem("KakaoToken");
+  const googleToken = localStorage.getItem("GoogleToken");
 
   const logOut = () => {
-    localStorage.removeItem("TOKEN");
-    navigate("/");
+    if (kakaoToken !== "") {
+      fetch(
+        `https://kauth.kakao.com/oauth/logout?client_id=${APIKEY}&logout_redirect_uri=${LOGOUT_URI}`
+      )
+        .then((res) => res.json())
+        .then((data) => data);
+      localStorage.removeItem("KakaoToken");
+      localStorage.removeItem("TOKEN");
+      navigate("/");
+    }
+    if (googleToken !== "") {
+      localStorage.removeItem("GoogleToken");
+      localStorage.removeItem("TOKEN");
+      navigate("/");
+    } else {
+      localStorage.removeItem("TOKEN");
+      navigate("/");
+    }
   };
 
   return (
