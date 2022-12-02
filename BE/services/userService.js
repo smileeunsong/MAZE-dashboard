@@ -159,6 +159,76 @@ const signIn = async (email, password) => {
   return accessToken;
 }
 
+const getKakaoUserInfo = async (kakaoAccessToken) => {
+
+  const result = await axios({
+    method: 'POST',
+    url: 'https://kapi.kakao.com/v2/user/me',
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Authorization': `Bearer ${kakaoAccessToken}`
+    }
+  })
+
+  const kakaoUserInfo = result.data;
+  return kakaoUserInfo
+};
+
+const storeKakaoUserInfo = async (kakaoUserInfo) => {
+  
+  const kakaoId = kakaoUserInfo.id;
+  const { email } = kakaoUserInfo.kakao_account;
+  const { nickname } = kakaoUserInfo.kakao_account.profile;
+  const profileImageUrl = kakaoUserInfo.kakao_account.profile.profile_image_url;
+    
+  const userId = await userDao.getUserIdByKakaoId(kakaoId);
+
+  if (!userId) {
+    await userDao.storeKakaoUserInfo(kakaoId, email, nickname, profileImageUrl)
+  }
+};
+
+const generateToken = async (userInfo) => {
+  const userIdKakao = await userDao.getUserIdByKakaoId(userInfo.id);  
+  const userIdGoogle = await userDao.getUserIdByGoogleId(userInfo.id);
+  
+  let userId = userIdKakao ? userIdKakao : userIdGoogle;
+
+  if (!userId) {
+    const err = new Error('SPECIFIED_USER_DOES_NOT_EXIST');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, 
+    { 
+      algorithm: process.env.ALGORITHM, 
+      expiresIn: process.env.JWT_EXPIRES_IN 
+    }
+  );
+};
+
+const getGoogleUserInfo = async (googleAccessToken) => {
+  const result = await axios({
+    method: 'GET',
+    url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleAccessToken}`
+  })
+
+  return result.data
+}
+
+const storeGoogleUserInfo = async (googleUserInfo) => {
+  const googleId = googleUserInfo.id;
+  const { email, name } = googleUserInfo;
+  const profileImageUrl = googleUserInfo.picture;
+
+  const userId = await userDao.getUserIdByGoogleId(googleId);
+
+  if (!userId) {
+    await userDao.storeGoogleUserInfo(googleId, email, name, profileImageUrl)
+  }
+}
+
 // 전체 회원 정보 반환
 const getUsers = async () => {
   return await userDao.getUsers();
@@ -176,6 +246,11 @@ module.exports = {
   signUp,
   checkEmail,
   signIn,
+  getKakaoUserInfo,
+  storeKakaoUserInfo,
+  generateToken,
+  getGoogleUserInfo,
+  storeGoogleUserInfo,
   getUsers,
   getUserById,
 }

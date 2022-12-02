@@ -9,17 +9,28 @@ module.exports = class User extends Sequelize.Model {
       },
       phone: {
         type: Sequelize.CHAR(11),
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING(30),
-        allowNull: false,
-        unique: true,
+        allowNull: true,
       },
       password: {
         type: Sequelize.STRING(100),
-        allowNull: false,
-      }
+        allowNull: true,
+      },
+      profileImageUrl: {
+        type: Sequelize.STRING(500),
+        allowNull: true,
+      },
+      kakaoId: {
+        type: Sequelize.BIGINT,
+        allowNull: true,
+      },
+      googleId: {
+        type: Sequelize.DECIMAL(30,0),
+        allowNull: true,
+      },
     }, {
       sequelize,
       timestamps: true,

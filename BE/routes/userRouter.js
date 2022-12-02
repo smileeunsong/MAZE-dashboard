@@ -17,6 +17,12 @@ router.post('/signup/check-email', userController.checkEmail);
 // 회원 로그인
 router.post('/signin', userController.signIn);
 
+// 카카오 OAuth 로그인
+router.post('/signin/kakao', userController.kakaoSignIn);
+
+// 구글 OAuth 로그인
+router.post('/signin/google', userController.googleSignIn);
+
 // 모든 회원 정보 조회
 router.get('/all', userController.getUsers);
 

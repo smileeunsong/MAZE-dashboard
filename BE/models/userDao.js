@@ -29,6 +29,48 @@ const addUser = async (userName, userPhoneNum, email, hashedPassword) => {
   return user.dataValues.id;
 }
 
+const getUserIdByKakaoId = async (kakaoId) => {
+  const result = await User.findOne({
+    where: { kakaoId: kakaoId }
+  });
+
+  if (!result) {
+    return false;
+  }
+
+  return result.dataValues.id;
+}
+
+const storeKakaoUserInfo = async (kakaoId, email, nickname, profileImageUrl) => {
+ await User.create({
+  kakaoId : kakaoId,
+  email : email,
+  name : nickname,
+  profileImageUrl : profileImageUrl
+ });
+}
+
+const getUserIdByGoogleId = async (googleId) => {
+  const result = await User.findOne({
+    where: { googleId: googleId }
+  });
+
+  if (!result) {
+    return false;
+  }
+
+  return result.dataValues.id;
+}
+
+const storeGoogleUserInfo = async (googleId, email, name, profileImageUrl) => {
+  await User.create({
+    googleId : googleId,
+    email : email,
+    name : name,
+    profileImageUrl : profileImageUrl
+   });
+}
+
 const getUsers = async () => {
   const users = await User.findAll();
 
@@ -56,6 +98,10 @@ module.exports = {
   getAuthCode,
   delAuthCode,
   addUser,
+  getUserIdByKakaoId,
+  storeKakaoUserInfo,
+  getUserIdByGoogleId,
+  storeGoogleUserInfo,
   getUsers,
   getUserById,
   getUserByEmail,
