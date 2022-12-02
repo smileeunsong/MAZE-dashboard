@@ -9,9 +9,10 @@ function MainStore(props) {
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [dashData, setDashData] = useState([]);
+  const [kakaoData, setKakaoData] = useState([]);
   const navigate = useNavigate;
 
-  const apiUrl = "http://maze-wecode-be.tk";
+  const apiUrl = "http://192.168.1.230:3000";
 
   const goBack = () => {
     navigate(-1);
@@ -47,6 +48,8 @@ function MainStore(props) {
         apiUrl,
         loading,
         setLoading,
+        kakaoData,
+        setKakaoData,
       }}
     >
       {props.children}

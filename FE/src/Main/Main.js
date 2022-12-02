@@ -9,7 +9,7 @@ import { MainContext } from "./MainContext";
 
 const Main = () => {
   const context = useContext(MainContext);
-  const { handleModalClose, loading } = context;
+  const { handleModalClose, loading, kakaoData } = context;
 
   if (loading) return <div>Loading...</div>;
 
