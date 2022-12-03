@@ -9,7 +9,6 @@ module.exports = class Store extends Sequelize.Model {
       },
       address: {
         type: Sequelize.STRING(30),
-        allowNull: false,
       },
     }, {
       sequelize,
@@ -25,5 +24,8 @@ module.exports = class Store extends Sequelize.Model {
 
   static associate(db) {
     db.Store.belongsToMany(db.User, { through: 'user_store' });
+    db.Store.hasMany(db.Order, { foreignKey: 'storeId', sourceKey: 'id' });
+    db.Store.hasMany(db.Item, { foreignKey: 'storeId', sourceKey: 'id' });
+    db.Store.hasMany(db.Option, { foreignKey: 'storeId', sourceKey: 'id' });
   }
 };

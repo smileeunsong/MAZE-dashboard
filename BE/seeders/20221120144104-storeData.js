@@ -1,28 +1,24 @@
-'use strict';
+const orderList = require('./data/wecode');
+
+// 스토어명 중복 제거된 배열 생성
+const listArr = orderList.map(el => el.storeName)
+
+const set = new Set(listArr);
+const uniqueArr = [...set];
+
+// db 테이블에 맞는 데이터로 변환하여 data라는 변수에 할당
+const data = [];
+for (let i = 0; i < uniqueArr.length; i++) {
+  const obj = {};
+  obj.name = uniqueArr[i];
+  obj.created_at = new Date();
+  obj.updated_at = new Date();
+  data.push(obj);
+}
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Stores', [{
-      name: '스타벅스',
-      address: '하남시 12로',
-      created_at: new Date(),
-      updated_at: new Date()
-    }, {
-      name: '커피빈',
-      address: '하남시 15로',
-      created_at: new Date(),
-      updated_at: new Date()
-    }, {
-      name: '카페베네',
-      address: '하남시 123로',
-      created_at: new Date(),
-      updated_at: new Date()
-    }, {
-      name: '빽다방',
-      address: '하남시 97로',
-      created_at: new Date(),
-      updated_at: new Date()
-    }], {});
+    await queryInterface.bulkInsert('Stores', data, {});
   },
 
   async down (queryInterface, Sequelize) {
