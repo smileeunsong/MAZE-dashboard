@@ -16,8 +16,10 @@
 
 ## 링크
 - <a href="https://maze-dashboard-wecode.netlify.app/">Netlify : 배포 링크</a>
-- <a href="https://www.notion.so/Maze-Wecode-d73b4212f25e43ff968c5adc32cd6cdf">Notion : 세부사항 정리</a>
-- <a href="https://docs.google.com/presentation/d/143y5fC5Mu6RUIq8OaurH0zLlxHBdAL6O8Y7xSRe5h9w/edit#slide=id.g197fe1dd980_0_10">Google Slides : 발표자료</a>
+- <a href="https://www.notion.so/Maze-Wecode-d73b4212f25e43ff968c5adc32cd6cdf">Notion : 세부사항 정리 중간 발표</a>
+- <a href="https://plucky-fortnight-4e0.notion.site/Maze-Wecode-3d329a04d80d4c8292f0c880c74ff694">Notion : 세부사항 정리 최종 발표</a>
+- <a href="https://docs.google.com/presentation/d/143y5fC5Mu6RUIq8OaurH0zLlxHBdAL6O8Y7xSRe5h9w/edit#slide=id.g197fe1dd980_0_10">Google Slides : 중간 발표자료</a>
+- <a href="https://docs.google.com/presentation/d/1-o1-SoDOxlsqJgj1XzsN_1Ef2uD3fnc9Dmnf03DKeBM/edit#slide=id.gcb9a0b074_1_0">Google Slides : 최종 발표자료</a>
 
 <br>
 <br>
