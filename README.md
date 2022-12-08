@@ -56,7 +56,7 @@
 </br>
 
 ## ERD
-![MAZE_PROJECT (1)](https://user-images.githubusercontent.com/111448985/203718169-6249f475-3eac-40aa-a638-64039a3d1739.png)
+![ERD_Maze Project](https://user-images.githubusercontent.com/111448985/206466653-8d2260c1-3ef4-454d-bfd7-5eeddadd7535.png)
 
 </br>
 </br>
