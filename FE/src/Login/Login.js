@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { MainContext } from "../Main/MainContext";
@@ -8,11 +8,7 @@ const Login = () => {
   const APIKEY = process.env.REACT_APP_APIKEY;
   const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${APIKEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const code = searchParams.get("#access_token");
   const navigate = useNavigate();
-
-  console.log(code);
 
   const context = useContext(MainContext);
   const { apiUrl } = context;
