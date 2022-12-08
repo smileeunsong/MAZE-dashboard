@@ -17,7 +17,7 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date()
     }, {
-      name: '천송이',
+      name: '손흥민',
       phone: '01012121212',
       email: 'hello@gmail.com',
       password: 'daheloo3',

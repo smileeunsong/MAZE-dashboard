@@ -1,4 +1,4 @@
-const { Store } = require('../models');
+const { Store } = require('../../models');
 
 const addStore = async (userId, storeName, storeAddress) => {
   const store = await Store.create({

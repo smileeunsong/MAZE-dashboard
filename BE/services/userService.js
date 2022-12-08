@@ -1,4 +1,4 @@
-const userDao = require('../models/userDao');
+const userDao = require('../models/dao/userDao');
 const CryptoJS = require('crypto-js');
 const axios = require('axios');
 const bcrypt = require('bcrypt')
