@@ -49,7 +49,9 @@ const Sales = () => {
             ₩{priceToString(price?.[0]?.salesAmount) ?? 0}
           </p>
           <div className="pb-3">
-            <span className="text-green-500 font-bold">{targetRate}% </span>
+            <span className="text-green-500 font-bold">
+              {price?.[0]?.salesAmount ? targetRate : 0}%{" "}
+            </span>
             <span>목표달성</span>
           </div>
           <FaWonSign className="absolute top-5 right-5 bg-teal-400 text-4xl rounded-full p-1" />
@@ -60,7 +62,9 @@ const Sales = () => {
             {priceToString(price?.[0]?.salesQty) ?? 0}잔
           </p>
           <div className="pb-3">
-            <span className="text-red-500 font-bold">{targetQty}% </span>
+            <span className="text-red-500 font-bold">
+              {price?.[0]?.salesQty ? targetQty : 0}%{" "}
+            </span>
             <span>전월대비</span>
           </div>
           <BiCoffeeTogo className="absolute top-5 right-5 bg-indigo-400 text-4xl rounded-full p-1" />
