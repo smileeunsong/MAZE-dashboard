@@ -18,7 +18,7 @@ module.exports = class Order extends Sequelize.Model {
         type: Sequelize.INTEGER,
         defaultValue: 1,
       },
-      totalPrice: {
+      UnitPrice: {
         type: Sequelize.DECIMAL,
       },
       pickup: {

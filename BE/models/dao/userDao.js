@@ -1,4 +1,4 @@
-const { client, User } = require('../models');
+const { client, User } = require('../../models');
 
 // userPhoneNum과 authCode 키 밸류 형식으로 redis 저장
 // 인증번호 유효시간 3분, 인증번호가 여러 번 발송된 경우에는 가장 최근 발송된 번호를 유저가 사용하도록 겹쳐쓰기 허용
@@ -81,8 +81,8 @@ const getUserById = async (userId) => {
   const userInfo = await User.findOne({
     where: { id: userId }
   });
-
-  return userInfo;
+  
+  return userInfo.dataValues;
 }
 
 const getUserByEmail = async (email) => {
@@ -90,7 +90,7 @@ const getUserByEmail = async (email) => {
     where: { email: email }
   });
 
-  return userInfo;
+  return userInfo.dataValues;
 }
 
 module.exports = {
