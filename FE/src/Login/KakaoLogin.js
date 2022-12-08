@@ -3,12 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { MainContext } from "../Main/MainContext";
 
 const KakaoLogin = () => {
-  const APIKEY = process.env.REACT_APP_APIKEY;
-  const context = useContext(MainContext);
-  const { apiUrl, kakaoData, setKakaoData } = context;
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  // 카카오 요청 필요 코드
+
+  const context = useContext(MainContext);
+  const { apiUrl } = context;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const APIKEY = process.env.REACT_APP_APIKEY;
+  // 카카오 요청 필수 코드 3가지
   const code = searchParams.get("code");
   const grant_type = "authorization_code";
   const client_id = APIKEY;
@@ -45,8 +46,6 @@ const KakaoLogin = () => {
           });
       });
   }, []);
-
-  console.log(kakaoData);
 
   return (
     <div className="flex justify-center items-center h-screen">

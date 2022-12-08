@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   AiOutlineMenu,
   AiOutlineBell,
@@ -10,7 +10,7 @@ import { MainContext } from "../Main/MainContext";
 
 const NavBar = () => {
   const context = useContext(MainContext);
-  const { openModal, handleModalOpen, handleModalClose, goBack, dashData } =
+  const { openModal, handleModalOpen, handleModalClose, goBack, apiUrl } =
     context;
   const navigate = useNavigate();
   const APIKEY = process.env.REACT_APP_APIKEY;
@@ -18,6 +18,8 @@ const NavBar = () => {
 
   const kakaoToken = localStorage.getItem("KakaoToken");
   const googleToken = localStorage.getItem("GoogleToken");
+
+  const [userData, setUserData] = useState([]);
 
   const logOut = () => {
     if (kakaoToken !== "") {
@@ -40,6 +42,17 @@ const NavBar = () => {
     }
   };
 
+  useEffect(() => {
+    fetch(`${apiUrl}/users/user-info`, {
+      method: "get",
+      headers: {
+        Authorization: localStorage.getItem("TOKEN"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setUserData(data.data));
+  }, [apiUrl]);
+
   return (
     <>
       <div className="bg-white h-16 flex items-center sticky top-0 z-10 border-b">
@@ -59,12 +72,16 @@ const NavBar = () => {
             </Link>
             <img
               className="w-8 h-8 mr-4 hover:cursor-pointer"
-              src={dashData.imageUrl}
+              src={
+                userData.profileImageUrl
+                  ? userData.profileImageUrl
+                  : "https://i.stack.imgur.com/34AD2.jpg"
+              }
               alt="profileimage"
               onClick={handleModalOpen}
             />
             <button className="text-xl font-bold" onClick={handleModalOpen}>
-              {dashData.username}
+              {userData.name}
             </button>
           </div>
         </div>
