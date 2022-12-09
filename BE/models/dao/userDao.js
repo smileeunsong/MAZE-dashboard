@@ -90,7 +90,7 @@ const getUserByEmail = async (email) => {
     where: { email: email }
   });
 
-  return userInfo.dataValues;
+  return userInfo;
 }
 
 module.exports = {
