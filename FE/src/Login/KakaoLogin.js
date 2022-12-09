@@ -16,7 +16,7 @@ const KakaoLogin = () => {
 
   useEffect(() => {
     fetch(
-      `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=http://localhost:3000/kakaologin&code=${code}`,
+      `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=https://maze-dashboard-wecode.netlify.app/kakaologin&code=${code}`,
       {
         method: "POST",
         headers: {
