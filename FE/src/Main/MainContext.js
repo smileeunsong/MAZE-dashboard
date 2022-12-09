@@ -25,7 +25,7 @@ function MainStore(props) {
     setOpenCModal(false);
   };
 
-  const apiUrl = "http://192.168.1.230:3000";
+  const apiUrl = "https://maze-dashboard.link";
 
   const goBack = () => {
     navigate(-1);

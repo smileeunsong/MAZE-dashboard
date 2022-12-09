@@ -21,7 +21,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     window.location.href =
-      "https://accounts.google.com/o/oauth2/auth?client_id=7699237530-i6ads8bsf9ltfm1rvg1tgiu1bissbs9i.apps.googleusercontent.com&redirect_uri=http://localhost:3000/googlelogin&response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+      "https://accounts.google.com/o/oauth2/auth?client_id=7699237530-i6ads8bsf9ltfm1rvg1tgiu1bissbs9i.apps.googleusercontent.com&redirect_uri=https://maze-dashboard-wecode.netlify.app/googlelogin&response_type=token&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
   };
 
   const isValidEmail = userId.includes("@") && userId.includes(".");
