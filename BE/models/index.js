@@ -27,26 +27,26 @@ db.client = client;
 
 db.User = User;
 db.Store = Store;
-db.Order = Order;
 db.State = State;
-db.Item = Item;
 db.Type = Type;
+db.Item = Item;
 db.Option = Option;
+db.Order = Order;
 
 User.init(sequelize);
 Store.init(sequelize);
-Order.init(sequelize);
 State.init(sequelize);
-Item.init(sequelize);
 Type.init(sequelize);
+Item.init(sequelize);
 Option.init(sequelize);
+Order.init(sequelize);
 
 User.associate(db);
 Store.associate(db);
-Order.associate(db);
 State.associate(db);
-Item.associate(db);
 Type.associate(db);
+Item.associate(db);
 Option.associate(db);
+Order.associate(db);
 
 module.exports = db

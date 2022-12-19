@@ -10,6 +10,7 @@ module.exports = class Item extends Sequelize.Model {
       storeMenuId : {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true,
       },
       name: {
         type: Sequelize.STRING(20),
