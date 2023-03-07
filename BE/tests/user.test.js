@@ -33,10 +33,28 @@ describe('Sign Up', () => {
   test('FAILED: invalid email', async () => {
     // supertest의 request를 활용하여 app에 테스트용 request를 보냅니다.
     await request(app)
-      .post('/users/signup') // HTTP Method, 엔드포인트 주소를 작성합니다.
-      .send({ email: 'wrongEmail', password: 'password001@' }) // body를 작성합니다.
-      .expect(400) // expect()로 예상되는 statusCode, response를 넣어 테스트할 수 있습니다.
-      .expect({ message: 'invalid email!' });
+      .post('/users/signup') // HTTP Method, 엔드포인트 주소를 작성
+      .send({
+        userName: '홍길동',
+        userPhoneNum: '01012341234',
+        email: 'wrongEmail',
+        password: 'password001@',
+      }) // 바디 작성
+      .expect(400)
+      .expect({ message: 'INVALID_EMAIL' });
+  });
+
+  test('FAILED: invalid password', async () => {
+    await request(app)
+      .post('/users/signup')
+      .send({
+        userName: '홍길동',
+        userPhoneNum: '01012341234',
+        email: '123@gmail.com',
+        password: 'password',
+      })
+      .expect(400)
+      .expect({ message: 'INVALID_PASSWORD' });
   });
 
   test('SUCCESS: created user', async () => {

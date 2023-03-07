@@ -1,12 +1,12 @@
 const userDao = require('../models/dao/userDao');
 const CryptoJS = require('crypto-js');
 const axios = require('axios');
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { validateEmail, validatePassword } = require('../utils/validator');
 
 // 코드 발급, 문자 발송
 const sendCode = async (userPhoneNum) => {
-
   // 현재 시각
   const timeStamp = String(Date.now());
 
@@ -14,7 +14,7 @@ const sendCode = async (userPhoneNum) => {
   let authCode = '';
   for (let i = 0; i < 6; i++) {
     authCode += parseInt(Math.random() * 10);
-  };
+  }
 
   // SENSE API headers에 필요한 signature 생성
   function makeSignature() {
@@ -24,7 +24,7 @@ const sendCode = async (userPhoneNum) => {
     const url = `/sms/v2/services/${process.env.SMS_SERVICE_ID}/messages`;
     const accessKey = process.env.SMS_ACCESS_KEY;
     const secretKey = process.env.SMS_SECRET_KEY;
-    
+
     const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
     hmac.update(method);
     hmac.update(space);
@@ -33,13 +33,13 @@ const sendCode = async (userPhoneNum) => {
     hmac.update(timeStamp);
     hmac.update(newLine);
     hmac.update(accessKey);
-    
-    const hash = hmac.finalize();
-    
-    return hash.toString(CryptoJS.enc.Base64);
-  };
 
-  const signature = String(makeSignature())
+    const hash = hmac.finalize();
+
+    return hash.toString(CryptoJS.enc.Base64);
+  }
+
+  const signature = String(makeSignature());
 
   // naver SENSE SMS 발송 API 요청
   await axios({
@@ -49,29 +49,28 @@ const sendCode = async (userPhoneNum) => {
       'Content-Type': 'application/json; charset=utf-8',
       'x-ncp-apigw-timestamp': timeStamp,
       'x-ncp-iam-access-key': process.env.SMS_ACCESS_KEY,
-      'x-ncp-apigw-signature-v2': signature
+      'x-ncp-apigw-signature-v2': signature,
     },
     data: {
-      'type': process.env.SMS_TYPE,
-      'from': process.env.SMS_FROM_NUMBER,
-      'content': '[메이즈]',
-      'messages': [
+      type: process.env.SMS_TYPE,
+      from: process.env.SMS_FROM_NUMBER,
+      content: '[메이즈]',
+      messages: [
         {
-          'to': userPhoneNum,
-          'subject': '[메이즈]',
-          'content': `[메이즈] 인증번호 [${authCode}]를 입력해주세요.`,
-        }
-      ]
-    }
-  })
+          to: userPhoneNum,
+          subject: '[메이즈]',
+          content: `[메이즈] 인증번호 [${authCode}]를 입력해주세요.`,
+        },
+      ],
+    },
+  });
 
   // userPhoneNum과 authCode 키 밸류 형식으로 redis 저장
-  await userDao.saveAuthCode(userPhoneNum, authCode)
-}
+  await userDao.saveAuthCode(userPhoneNum, authCode);
+};
 
 // 코드 비교
 const compareAuthCode = async (userPhoneNum, userCode) => {
-
   // 서버 redis에 저장된 authCode와 클라이언트에서 받은 userCode를 비교
   const authCode = await userDao.getAuthCode(userPhoneNum);
 
@@ -84,7 +83,7 @@ const compareAuthCode = async (userPhoneNum, userCode) => {
 
     throw error;
   }
-}
+};
 
 // bcrypt를 이용하여 비밀번호 hashing 하는 함수
 const hashPassword = async (plaintextPassword) => {
@@ -92,29 +91,37 @@ const hashPassword = async (plaintextPassword) => {
   const salt = await bcrypt.genSalt(saltRounds);
 
   return await bcrypt.hash(plaintextPassword, salt);
-}
+};
 
 // 회원 정보 DB 저장 후 해당 회원 id 반환
 const signUp = async (userName, userPhoneNum, email, password) => {
-
   // 기대 요청값들이 하나라도 들어오지 않았을 경우
-  if ( !userName || !userPhoneNum || !email || !password ) {
+  if (!userName || !userPhoneNum || !email || !password) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
 
     throw error;
   }
 
+  // 비밀번호와 이메일 정규표현식 검증
+  validateEmail(email);
+  validatePassword(password);
+
+  // 비밀번호 해쉬화
   const hashedPassword = await hashPassword(password);
 
-  const userId = await userDao.addUser(userName, userPhoneNum, email, hashedPassword);
+  const userId = await userDao.addUser(
+    userName,
+    userPhoneNum,
+    email,
+    hashedPassword
+  );
 
   return userId;
-}
+};
 
 // 이메일 중복 체크
 const checkEmail = async (email) => {
-
   // 해당 email로 가입된 회원이 존재하는 경우
   const user = await userDao.getUserByEmail(email);
   if (user) {
@@ -123,7 +130,7 @@ const checkEmail = async (email) => {
 
     throw error;
   }
-}
+};
 
 // 로그인
 const signIn = async (email, password) => {
@@ -149,49 +156,45 @@ const signIn = async (email, password) => {
   }
 
   // email과 password가 맞으면 JWT를 생성 후 반환
-  const accessToken = jwt.sign({ id : user.id }, process.env.JWT_SECRET,
-    {
-      algorithm: process.env.ALGORITHM, 
-			expiresIn: process.env.JWT_EXPIRES_IN 
-    }
-  );
+  const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    algorithm: process.env.ALGORITHM,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 
   return accessToken;
-}
+};
 
 const getKakaoUserInfo = async (kakaoAccessToken) => {
-
   const result = await axios({
     method: 'POST',
     url: 'https://kapi.kakao.com/v2/user/me',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-      'Authorization': `Bearer ${kakaoAccessToken}`
-    }
-  })
+      Authorization: `Bearer ${kakaoAccessToken}`,
+    },
+  });
 
   const kakaoUserInfo = result.data;
-  return kakaoUserInfo
+  return kakaoUserInfo;
 };
 
 const storeKakaoUserInfo = async (kakaoUserInfo) => {
-  
   const kakaoId = kakaoUserInfo.id;
   const { email } = kakaoUserInfo.kakao_account;
   const { nickname } = kakaoUserInfo.kakao_account.profile;
   const profileImageUrl = kakaoUserInfo.kakao_account.profile.profile_image_url;
-    
+
   const userId = await userDao.getUserIdByKakaoId(kakaoId);
 
   if (!userId) {
-    await userDao.storeKakaoUserInfo(kakaoId, email, nickname, profileImageUrl)
+    await userDao.storeKakaoUserInfo(kakaoId, email, nickname, profileImageUrl);
   }
 };
 
 const generateToken = async (userInfo) => {
-  const userIdKakao = await userDao.getUserIdByKakaoId(userInfo.id);  
+  const userIdKakao = await userDao.getUserIdByKakaoId(userInfo.id);
   const userIdGoogle = await userDao.getUserIdByGoogleId(userInfo.id);
-  
+
   let userId = userIdKakao ? userIdKakao : userIdGoogle;
 
   if (!userId) {
@@ -200,22 +203,20 @@ const generateToken = async (userInfo) => {
     throw err;
   }
 
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, 
-    { 
-      algorithm: process.env.ALGORITHM, 
-      expiresIn: process.env.JWT_EXPIRES_IN 
-    }
-  );
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    algorithm: process.env.ALGORITHM,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 };
 
 const getGoogleUserInfo = async (googleAccessToken) => {
   const result = await axios({
     method: 'GET',
-    url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleAccessToken}`
-  })
+    url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleAccessToken}`,
+  });
 
-  return result.data
-}
+  return result.data;
+};
 
 const storeGoogleUserInfo = async (googleUserInfo) => {
   const googleId = googleUserInfo.id;
@@ -225,20 +226,20 @@ const storeGoogleUserInfo = async (googleUserInfo) => {
   const userId = await userDao.getUserIdByGoogleId(googleId);
 
   if (!userId) {
-    await userDao.storeGoogleUserInfo(googleId, email, name, profileImageUrl)
+    await userDao.storeGoogleUserInfo(googleId, email, name, profileImageUrl);
   }
-}
+};
 
 // 전체 회원 정보 반환
 const getUsers = async () => {
   return await userDao.getUsers();
-}
+};
 
 // 회원 id로 정보 반환
 const getUserById = async (userId) => {
   const userInfo = await userDao.getUserById(userId);
   return userInfo;
-}
+};
 
 module.exports = {
   sendCode,
@@ -253,4 +254,4 @@ module.exports = {
   storeGoogleUserInfo,
   getUsers,
   getUserById,
-}
+};
