@@ -35,11 +35,12 @@ const start = async () => {
   try {
     app.listen(port, () => logger.info(`Server is listening on ${port}`));
 
-    console.log('Development Mode');
     if (process.env.NODE_ENV === 'production') {
-      console.log('Production Mode');
+      console.log('===Production Mode===');
     } else if (process.env.NODE_ENV === 'test') {
-      console.log('Test Mode');
+      console.log('===Test Mode===');
+    } else {
+      console.log('===Development Mode===');
     }
   } catch (err) {
     console.error(err);
